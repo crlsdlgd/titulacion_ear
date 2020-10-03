@@ -17,22 +17,32 @@
 
         <h:body>
             <ui:decorate template="template.xhtml"></ui:decorate>
+            <f:event type="preRenderView" listener="#{controladorPlan.cargarPlan()}"/>
             <h:form>
                 <p:dataTable id="data" var="plan" value="#{controladorPlan.listaPlan}" >
                     <p:column headerText="Tema">
                         <h:outputText value="#{plan.tema}"/>
                     </p:column>
-                    <p:column headerText="Estudiantes">
-                        <h:outputText value="#{plan.idPlan}" />
-                    </p:column>
                     <p:column headerText="Fecha">
                         <h:outputText value="#{plan.fecha}" />
                     </p:column>
+                    <p:column headerText="Estudiantes">
+                        <p:commandLink value="Ver Estudiantes" actionListener="#{controladorPlan.listarUsuarioByPlan(plan)}" oncomplete="PF('wdlWare').show();" update=":dlgWare"/>
+                    </p:column>        
                 </p:dataTable>
-                <p:commandButton value="Listar" actionListener="#{controladorPlan.cargarPlan()}" update="data" />
             </h:form>
-        </h:body>
 
+            <p:dialog header="Integrantes" widgetVar="wdlWare" id="dlgWare">
+                <h:form>
+                    <p:dataTable value="#{controladorPlan.listUsuario}" var="usuario">
+                        <p:column headerText="Integrantes">
+                            <p:outputLabel value="#{usuario.nombre}" />
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+            </p:dialog>
+
+        </h:body>
     </f:view>
 </html>
 

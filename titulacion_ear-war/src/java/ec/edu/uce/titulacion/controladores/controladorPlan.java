@@ -2,6 +2,8 @@ package ec.edu.uce.titulacion.controladores;
 
 import ec.edu.uce.titulacion.entidades.Plan;
 import ec.edu.uce.titulacion.dao.PlanDao;
+import ec.edu.uce.titulacion.dao.UsuarioDao;
+import ec.edu.uce.titulacion.entidades.Usuario;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -14,9 +16,29 @@ import javax.ejb.EJB;
 public class controladorPlan implements Serializable {
 
     @EJB
+    private UsuarioDao usuarioDao;
+
+    @EJB
     private PlanDao planDao;
     
     private List<Plan> listaPlan;
+    private List<Usuario> listUsuario;
+
+    public PlanDao getPlanDao() {
+        return planDao;
+    }
+
+    public void setPlanDao(PlanDao planDao) {
+        this.planDao = planDao;
+    }
+
+    public List<Usuario> getListUsuario() {
+        return listUsuario;
+    }
+
+    public void setListUsuario(List<Usuario> listUsuario) {
+        this.listUsuario = listUsuario;
+    }
     
     private String usuariosPlan;
 
@@ -39,32 +61,13 @@ public class controladorPlan implements Serializable {
 
     public controladorPlan() {
     }
-    
-    @PostConstruct
-    public void init(){
-        //cargarPlan();
-        //mostrarPlan();
-    }
 
     public void cargarPlan() throws Exception{
         listaPlan=planDao.listarPlan();
-        
-//        for(int i=0;i<listaPlan.size();i++){
-//            for(int j=0;j<listaPlan.get(i).getUsuarioList().size();j++){
-//                usuariosPlan+=listaPlan.get(i).getUsuarioList().get(j).getNombre()+", ";
-//            }
-//        }
-//        System.out.println("lista de usuarios "+usuariosPlan);
     }
 
-    public void mostrarPlan() {
-        if(listaPlan.size()<0){
-            System.out.println("No hay planes");
-        }else{
-            for(int i=0;i<listaPlan.size();i++){
-                System.out.println(listaPlan.get(i).getTema());
-            }
-        }
+    public void listarUsuarioByPlan(Plan plan) throws Exception{
+        listUsuario = usuarioDao.listarUserByPlan(plan);
     }
     
 }

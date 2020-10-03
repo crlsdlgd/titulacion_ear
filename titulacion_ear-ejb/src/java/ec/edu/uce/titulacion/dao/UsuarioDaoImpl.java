@@ -62,7 +62,7 @@ public class UsuarioDaoImpl extends DAO implements UsuarioDao {
             PreparedStatement st = this.getCn().prepareCall("SELECT u.id_usuario, u.nombre, u.email, u.nick\n"
                     + "FROM plan p, usuario u, plan_usuario pu\n"
                     + "WHERE pu.id_usuario = u.id_usuario AND\n"
-                    + " p.id_plan= pu.id_plan AND u.id_plan=?");
+                    + " p.id_plan= pu.id_plan AND p.id_plan=?");
             
             st.setInt(1, plan.getIdPlan());
             rs = st.executeQuery();
