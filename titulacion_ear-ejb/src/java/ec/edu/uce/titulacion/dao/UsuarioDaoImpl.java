@@ -1,0 +1,118 @@
+package ec.edu.uce.titulacion.dao;
+
+import ec.edu.uce.titulacion.entidades.Plan;
+import ec.edu.uce.titulacion.entidades.Usuario;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+import javax.ejb.Stateless;
+
+@Stateless
+public class UsuarioDaoImpl extends DAO implements UsuarioDao {
+    
+    @Override
+    public void registrar(Usuario usuario) throws Exception {
+        try {
+            this.Conectar();
+            PreparedStatement st = this.getCn().prepareStatement("INSERT INTO usuario (nombre, email, password, nick) VALUES(?,?,?,?)");
+            st.setString(1, usuario.getNombre());
+            st.setString(2, usuario.getEmail());
+            st.setString(3, usuario.getPassword());
+            st.setString(4, usuario.getNick());
+            st.executeUpdate();
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            this.Cerrar();
+        }
+    }
+    
+    @Override
+    public List<Usuario> listarUsuario() throws Exception {
+        List<Usuario> lista;
+        ResultSet rs;
+        try {
+            this.Conectar();
+            PreparedStatement st = this.getCn().prepareCall("SELECT id_usuario, nombre, email, nick FROM usuario");
+            rs = st.executeQuery();
+            lista = new ArrayList();
+            while (rs.next()) {
+                Usuario usuario = new Usuario();
+                usuario.setIdUsuario(rs.getInt("id_usuario"));
+                usuario.setNombre(rs.getString("nombre"));
+                usuario.setEmail(rs.getString("email"));
+                usuario.setNick(rs.getString("nick"));
+                lista.add(usuario);
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            this.Cerrar();
+        }
+        return lista;
+    }
+    
+    @Override
+    public List<Usuario> listarUserByPlan(Plan plan) throws Exception {
+        List<Usuario> lista;
+        ResultSet rs;
+        try {
+            this.Conectar();
+            PreparedStatement st = this.getCn().prepareCall("SELECT u.id_usuario, u.nombre, u.email, u.nick\n"
+                    + "FROM plan p, usuario u, plan_usuario pu\n"
+                    + "WHERE pu.id_usuario = u.id_usuario AND\n"
+                    + " p.id_plan= pu.id_plan AND u.id_plan=?");
+            
+            st.setInt(1, plan.getIdPlan());
+            rs = st.executeQuery();
+            lista = new ArrayList();
+            while (rs.next()) {
+                Usuario usuario = new Usuario();
+                usuario.setIdUsuario(rs.getInt("id_usuario"));
+                usuario.setNombre(rs.getString("nombre"));
+                usuario.setEmail(rs.getString("email"));
+                usuario.setNick(rs.getString("nick"));
+                lista.add(usuario);
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            this.Cerrar();
+        }
+        return lista;
+    }
+    
+    @Override
+    public Usuario buscarUsuarioLogin(String nick, String pass) throws Exception {
+        Usuario usuario;
+        ResultSet rs;
+        try {
+            this.Conectar();
+            PreparedStatement st = this.getCn().prepareCall("SELECT id_usuario, nombre, email, nick FROM usuario WHERE nick = ? AND password = ? ");
+            st.setString(1, nick);
+            st.setString(2, pass);
+            rs = st.executeQuery();
+            usuario = new Usuario();
+            
+            while (rs.next()) {                
+                usuario.setIdUsuario(rs.getInt("id_usuario"));
+                usuario.setNombre(rs.getString("nombre"));
+                usuario.setEmail(rs.getString("email"));
+                usuario.setNick(rs.getString("nick"));
+            }
+            System.out.println(usuario.getIdUsuario()+", "+usuario.getNombre()+", "+usuario.getEmail()+", "+usuario.getNick()+". ");
+            if(usuario.getIdUsuario()==null){
+                return null;
+            }
+                    
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            this.Cerrar();
+        }
+        return usuario;
+        //return null;
+    }
+    
+}
