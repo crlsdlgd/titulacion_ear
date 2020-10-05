@@ -10,7 +10,7 @@ import javax.ejb.Stateless;
 
 @Stateless
 public class UsuarioDaoImpl extends DAO implements UsuarioDao {
-    
+
     @Override
     public void registrar(Usuario usuario) throws Exception {
         try {
@@ -27,7 +27,7 @@ public class UsuarioDaoImpl extends DAO implements UsuarioDao {
             this.Cerrar();
         }
     }
-    
+
     @Override
     public List<Usuario> listarUsuario() throws Exception {
         List<Usuario> lista;
@@ -52,7 +52,7 @@ public class UsuarioDaoImpl extends DAO implements UsuarioDao {
         }
         return lista;
     }
-    
+
     @Override
     public List<Usuario> listarUserByPlan(Plan plan) throws Exception {
         List<Usuario> lista;
@@ -63,7 +63,7 @@ public class UsuarioDaoImpl extends DAO implements UsuarioDao {
                     + "FROM plan p, usuario u, plan_usuario pu\n"
                     + "WHERE pu.id_usuario = u.id_usuario AND\n"
                     + " p.id_plan= pu.id_plan AND p.id_plan=?");
-            
+
             st.setInt(1, plan.getIdPlan());
             rs = st.executeQuery();
             lista = new ArrayList();
@@ -82,7 +82,7 @@ public class UsuarioDaoImpl extends DAO implements UsuarioDao {
         }
         return lista;
     }
-    
+
     @Override
     public Usuario buscarUsuarioLogin(String nick, String pass) throws Exception {
         Usuario usuario;
@@ -94,18 +94,18 @@ public class UsuarioDaoImpl extends DAO implements UsuarioDao {
             st.setString(2, pass);
             rs = st.executeQuery();
             usuario = new Usuario();
-            
-            while (rs.next()) {                
+
+            while (rs.next()) {
                 usuario.setIdUsuario(rs.getInt("id_usuario"));
                 usuario.setNombre(rs.getString("nombre"));
                 usuario.setEmail(rs.getString("email"));
                 usuario.setNick(rs.getString("nick"));
             }
-            System.out.println(usuario.getIdUsuario()+", "+usuario.getNombre()+", "+usuario.getEmail()+", "+usuario.getNick()+". ");
-            if(usuario.getIdUsuario()==null){
+            System.out.println(usuario.getIdUsuario() + ", " + usuario.getNombre() + ", " + usuario.getEmail() + ", " + usuario.getNick() + ". ");
+            if (usuario.getIdUsuario() == null) {
                 return null;
             }
-                    
+
         } catch (Exception e) {
             throw e;
         } finally {
@@ -114,5 +114,65 @@ public class UsuarioDaoImpl extends DAO implements UsuarioDao {
         return usuario;
         //return null;
     }
-    
+
+    @Override
+    public List<Usuario> listarEstudiantes() throws Exception {
+        List<Usuario> lista;
+        ResultSet rs;
+        try {
+            this.Conectar();
+            PreparedStatement st = this.getCn().prepareCall("SELECT u.id_usuario, u.nombre, u.email, u.nick \n"
+                    + "FROM usuario u, rol r, rol_usuario ru\n"
+                    + "WHERE u.id_usuario=ru.id_usuario AND\n"
+                    + "ru.id_rol=r.id_rol AND r.rol= 'Estudiante'");
+
+            rs = st.executeQuery();
+            lista = new ArrayList();
+            while (rs.next()) {
+                Usuario usuario = new Usuario();
+                usuario.setIdUsuario(rs.getInt("id_usuario"));
+                usuario.setNombre(rs.getString("nombre"));
+                usuario.setEmail(rs.getString("email"));
+                usuario.setNick(rs.getString("nick"));
+                lista.add(usuario);
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            this.Cerrar();
+        }
+        return lista;
+    }
+
+    @Override
+    public List<String> autoCompletarEstudiante(String query) throws Exception {
+        List<String> lista;
+        ResultSet rs;
+        query = "%"+query+"%";
+        System.out.println("-----------------QUEY: "+query);
+        try {
+            this.Conectar();
+            PreparedStatement st = this.getCn().prepareCall("SELECT u.nombre\n"
+                    + "FROM usuario u, rol r, rol_usuario ru\n"
+                    + "WHERE UPPER(u.nombre) LIKE UPPER( ? ) AND\n"
+                    + "u.id_usuario=ru.id_usuario AND\n"
+                    + "ru.id_rol = r.id_rol AND\n"
+                    + "r.rol='Estudiante'");
+            st.setString(1, query);
+            rs = st.executeQuery();
+            lista = new ArrayList();
+            while (rs.next()) {
+                String aux = rs.getString("nombre");
+                System.out.println(aux);
+                lista.add(aux);
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            this.Cerrar();
+        }
+        return lista;
+
+    }
+
 }

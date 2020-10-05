@@ -7,14 +7,20 @@ import ec.edu.uce.titulacion.entidades.Usuario;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.enterprise.context.RequestScoped;
+import javax.faces.bean.ViewScoped;
 
 @Named(value = "controladorPlan")
-@SessionScoped
+//@SessionScoped
+@RequestScoped
+
 public class controladorPlan implements Serializable {
 
+    private static final long serialversionuid = 1L;
     @EJB
     private UsuarioDao usuarioDao;
 
@@ -23,6 +29,76 @@ public class controladorPlan implements Serializable {
     
     private List<Plan> listaPlan;
     private List<Usuario> listUsuario;
+    private List<Usuario> listIntegrantes;
+    private Usuario usuario;
+    private Plan plan;
+    private String usuariosPlan;
+    private String txt1;
+
+    public String getTxt1() {
+        return txt1;
+    }
+
+    public void setTxt1(String txt1) {
+        this.txt1 = txt1;
+    }
+    
+    public void cargarPlan() throws Exception{
+        listaPlan=planDao.listarPlan();
+    }
+
+    public void listarUsuarioByPlan(Plan plan) throws Exception{
+        listUsuario = usuarioDao.listarUserByPlan(plan);
+    }
+    
+//    public void cargarEstudiantes() throws Exception{
+//        listUsuario = usuarioDao.listarEstudiantes();
+//    }
+//    
+//    public void anadirEstudiante(Usuario usuario){
+//        listUsuario.remove(usuario);
+//        listIntegrantes.add(usuario);
+//    }
+//    
+//    public void quitarEstudiante(Usuario usuario){
+//        listUsuario.add(usuario);
+//        listIntegrantes.remove(usuario);
+//    }
+
+    public List<String> autoCompletarEstudiante(String query) throws Exception{
+        System.out.println("------------------query: "+query);
+        List<String> lista = usuarioDao.autoCompletarEstudiante(query);
+        System.out.println(lista.size()+" QUERY "+lista.get(0));
+        
+        return lista;
+    }
+    
+    public controladorPlan() {
+    }
+    
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public List<Usuario> getListIntegrantes() {
+        return listIntegrantes;
+    }
+
+    public void setListIntegrantes(List<Usuario> listIntegrantes) {
+        this.listIntegrantes = listIntegrantes;
+    }
+
+    public Plan getPlan() {
+        return plan;
+    }
+
+    public void setPlan(Plan plan) {
+        this.plan = plan;
+    }
 
     public PlanDao getPlanDao() {
         return planDao;
@@ -40,8 +116,6 @@ public class controladorPlan implements Serializable {
         this.listUsuario = listUsuario;
     }
     
-    private String usuariosPlan;
-
     public String getUsuariosPlan() {
         return usuariosPlan;
     }
@@ -49,7 +123,6 @@ public class controladorPlan implements Serializable {
     public void setUsuariosPlan(String usuariosPlan) {
         this.usuariosPlan = usuariosPlan;
     }
-    
 
     public List<Plan> getListaPlan() {
         return listaPlan;
@@ -57,17 +130,6 @@ public class controladorPlan implements Serializable {
 
     public void setListaPlan(List<Plan> listaPlan) {
         this.listaPlan = listaPlan;
-    }
-
-    public controladorPlan() {
-    }
-
-    public void cargarPlan() throws Exception{
-        listaPlan=planDao.listarPlan();
-    }
-
-    public void listarUsuarioByPlan(Plan plan) throws Exception{
-        listUsuario = usuarioDao.listarUserByPlan(plan);
     }
     
 }

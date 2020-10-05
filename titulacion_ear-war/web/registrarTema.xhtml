@@ -17,19 +17,22 @@
 
         <h:body>
             <ui:decorate template="template.xhtml"></ui:decorate>
+            <!--<f:event type="preRenderView" listener="{controladorPlan.cargarEstudiantes()}"/>-->
             <h:form>
-                <p:panelGrid columns="2" styleClass="showcase-text-align-center" style="width: 50%;">
+                <p:panelGrid columns="2" styleClass="showcase-text-align-center" style="width: 50%;" >
                     <h:outputText value="Tema" /> 
-                    <p:inputText placeholder="Ingrese tema" />
+                    <p:inputText placeholder="Ingrese tema" value="#{controladorPlan.plan.tema}" />
 
                     <h:outputText value="Fecha" /> 
-                    <p:calendar value="#{dateBean.date}" mode="popup" showOn="button" />
+                    <p:calendar value="#{controladorPlan.plan.fecha}" mode="popup" showOn="button" />
 
                     <h:outputText value="Estudiantes" /> 
-                    <p:autoComplete id="acSimple" value="#{autoCompleteView.txt1}" completeMethod="#{autoCompleteView.completeText}" />
+                    <p:autoComplete id="acSimple" minQueryLength="3" queryDelay="1000" maxResults="5"
+                                    value="#{controladorPlan.txt1}" 
+                                    completeMethod="#{controladorPlan.autoCompletarEstudiante}" >
+                        <p:ajax event="itemSelect" update="@this"/>
+                    </p:autoComplete>
 
-                    <h:outputText value="Plan de titulación" /> 
-                    <input type="File" value="Selecione archivo" />
                 </p:panelGrid>
                 <p:commandButton value="Guardar Cambios" action="#" />
                 <p:commandButton value="Cancelar" action="#" />

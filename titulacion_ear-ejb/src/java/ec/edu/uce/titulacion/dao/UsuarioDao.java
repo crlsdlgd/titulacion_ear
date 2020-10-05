@@ -9,6 +9,10 @@ import javax.ejb.Local;
 public interface UsuarioDao {
     public void registrar(Usuario usuario) throws Exception;
     public List<Usuario> listarUsuario() throws Exception;
+    public List<Usuario> listarEstudiantes() throws Exception;
     public List<Usuario> listarUserByPlan(Plan plan) throws Exception;
     Usuario buscarUsuarioLogin(String nick, String pass)throws Exception;
+
+    public List<String> autoCompletarEstudiante(String query) throws Exception;
+    
 }
