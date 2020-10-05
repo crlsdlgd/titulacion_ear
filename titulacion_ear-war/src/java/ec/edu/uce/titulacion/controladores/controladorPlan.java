@@ -50,26 +50,9 @@ public class controladorPlan implements Serializable {
     public void listarUsuarioByPlan(Plan plan) throws Exception{
         listUsuario = usuarioDao.listarUserByPlan(plan);
     }
-    
-//    public void cargarEstudiantes() throws Exception{
-//        listUsuario = usuarioDao.listarEstudiantes();
-//    }
-//    
-//    public void anadirEstudiante(Usuario usuario){
-//        listUsuario.remove(usuario);
-//        listIntegrantes.add(usuario);
-//    }
-//    
-//    public void quitarEstudiante(Usuario usuario){
-//        listUsuario.add(usuario);
-//        listIntegrantes.remove(usuario);
-//    }
 
     public List<String> autoCompletarEstudiante(String query) throws Exception{
-        System.out.println("------------------query: "+query);
         List<String> lista = usuarioDao.autoCompletarEstudiante(query);
-        System.out.println(lista.size()+" QUERY "+lista.get(0));
-        
         return lista;
     }
     

@@ -101,7 +101,7 @@ public class UsuarioDaoImpl extends DAO implements UsuarioDao {
                 usuario.setEmail(rs.getString("email"));
                 usuario.setNick(rs.getString("nick"));
             }
-            System.out.println(usuario.getIdUsuario() + ", " + usuario.getNombre() + ", " + usuario.getEmail() + ", " + usuario.getNick() + ". ");
+            
             if (usuario.getIdUsuario() == null) {
                 return null;
             }
@@ -112,36 +112,7 @@ public class UsuarioDaoImpl extends DAO implements UsuarioDao {
             this.Cerrar();
         }
         return usuario;
-        //return null;
-    }
-
-    @Override
-    public List<Usuario> listarEstudiantes() throws Exception {
-        List<Usuario> lista;
-        ResultSet rs;
-        try {
-            this.Conectar();
-            PreparedStatement st = this.getCn().prepareCall("SELECT u.id_usuario, u.nombre, u.email, u.nick \n"
-                    + "FROM usuario u, rol r, rol_usuario ru\n"
-                    + "WHERE u.id_usuario=ru.id_usuario AND\n"
-                    + "ru.id_rol=r.id_rol AND r.rol= 'Estudiante'");
-
-            rs = st.executeQuery();
-            lista = new ArrayList();
-            while (rs.next()) {
-                Usuario usuario = new Usuario();
-                usuario.setIdUsuario(rs.getInt("id_usuario"));
-                usuario.setNombre(rs.getString("nombre"));
-                usuario.setEmail(rs.getString("email"));
-                usuario.setNick(rs.getString("nick"));
-                lista.add(usuario);
-            }
-        } catch (Exception e) {
-            throw e;
-        } finally {
-            this.Cerrar();
-        }
-        return lista;
+   
     }
 
     @Override
@@ -149,7 +120,6 @@ public class UsuarioDaoImpl extends DAO implements UsuarioDao {
         List<String> lista;
         ResultSet rs;
         query = "%"+query+"%";
-        System.out.println("-----------------QUEY: "+query);
         try {
             this.Conectar();
             PreparedStatement st = this.getCn().prepareCall("SELECT u.nombre\n"
@@ -163,7 +133,6 @@ public class UsuarioDaoImpl extends DAO implements UsuarioDao {
             lista = new ArrayList();
             while (rs.next()) {
                 String aux = rs.getString("nombre");
-                System.out.println(aux);
                 lista.add(aux);
             }
         } catch (Exception e) {
