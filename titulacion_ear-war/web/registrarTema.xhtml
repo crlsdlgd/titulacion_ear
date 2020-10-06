@@ -17,26 +17,36 @@
 
         <h:body>
             <ui:decorate template="template.xhtml"></ui:decorate>
-            <!--<f:event type="preRenderView" listener="{controladorPlan.cargarEstudiantes()}"/>-->
+            
             <h:form>
                 <p:panelGrid columns="2" styleClass="showcase-text-align-center" style="width: 50%;" >
                     <h:outputText value="Tema" /> 
-                    <p:inputText placeholder="Ingrese tema" value="#{controladorPlan.plan.tema}" />
+                    <p:inputText placeholder="Ingrese tema" value="#{controladorPlan.txtTema}" />
 
                     <h:outputText value="Fecha" /> 
-                    <p:calendar value="#{controladorPlan.plan.fecha}" mode="popup" showOn="button" />
+                    <p:calendar value="#{controladorPlan.txtFecha}" mode="popup" showOn="button" />
 
+                </p:panelGrid >
+                <p:panelGrid columns="3" styleClass="showcase-text-align-center" style="width: 50%;">
                     <h:outputText value="Estudiantes" /> 
                     <p:autoComplete id="acSimple" minQueryLength="3" queryDelay="1000" maxResults="5"
-                                    value="#{controladorPlan.txt1}" 
+                                    value="#{controladorPlan.txtEstudiante}" 
                                     completeMethod="#{controladorPlan.autoCompletarEstudiante}" >
                         <p:ajax event="itemSelect" update="@this"/>
-                        <p:commandButton value="Añadir" />
-                    </p:autoComplete>
 
+                    </p:autoComplete>
+                    <p:commandButton value="Añadir Estudiante" actionListener="#{controladorPlan.anadirEstudiante()}" update="data"/>
                 </p:panelGrid>
-                <p:commandButton value="Guardar Cambios" action="#" />
-                <p:commandButton value="Cancelar" action="#" />
+                <p:dataTable id="data" var="estudiante" value="#{controladorPlan.listIntegrantes}">
+                    <p:column headerText="Nombre">
+                        <h:outputText value="#{estudiante}"/>
+                    </p:column>
+                    <p:column headerText="Acciones">
+                        <p:commandLink value="Quitar Estudiante" actionListener="#{controladorPlan.quitarEstudiante(estudiante)}" update="data" ajax="false"/>
+                    </p:column>
+                </p:dataTable>
+                <p:commandButton value="Guardar Cambios" actionListener="#{controladorPlan.guardarPlan()}" style="background-color: #5ce620"/>
+                <p:commandButton value="Cancelar" action="/faces/homeDocente.xhtml" />
             </h:form>
         </h:body>
 

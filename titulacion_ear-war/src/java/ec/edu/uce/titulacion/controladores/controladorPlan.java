@@ -5,17 +5,15 @@ import ec.edu.uce.titulacion.dao.PlanDao;
 import ec.edu.uce.titulacion.dao.UsuarioDao;
 import ec.edu.uce.titulacion.entidades.Usuario;
 import javax.inject.Named;
-import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
-import javax.faces.bean.ViewScoped;
 
 @Named(value = "controladorPlan")
-//@SessionScoped
 @RequestScoped
 
 public class controladorPlan implements Serializable {
@@ -26,37 +24,75 @@ public class controladorPlan implements Serializable {
 
     @EJB
     private PlanDao planDao;
-    
+
     private List<Plan> listaPlan;
     private List<Usuario> listUsuario;
-    private List<Usuario> listIntegrantes;
+    private List<String> listIntegrantes;
     private Usuario usuario;
     private Plan plan;
     private String usuariosPlan;
-    private String txt1;
+    private String txtEstudiante,txtTema;
+    private Date txtFecha; 
 
-    public String getTxt1() {
-        return txt1;
+    public void cargarPlan() throws Exception {
+        listaPlan = planDao.listarPlan();
     }
 
-    public void setTxt1(String txt1) {
-        this.txt1 = txt1;
-    }
-    
-    public void cargarPlan() throws Exception{
-        listaPlan=planDao.listarPlan();
-    }
-
-    public void listarUsuarioByPlan(Plan plan) throws Exception{
+    public void listarUsuarioByPlan(Plan plan) throws Exception {
         listUsuario = usuarioDao.listarUserByPlan(plan);
     }
 
-    public List<String> autoCompletarEstudiante(String query) throws Exception{
+    public List<String> autoCompletarEstudiante(String query) throws Exception {
         List<String> lista = usuarioDao.autoCompletarEstudiante(query);
         return lista;
     }
+
+    public void anadirEstudiante() {
+        listIntegrantes.add(txtEstudiante);
+        System.out.println("la lista de integrantes tiene: "+listIntegrantes.size()+", "+listIntegrantes.get(0));
+    }
+
+    public void quitarEstudiante(String txt) {
+        listIntegrantes.remove(txt);
+        System.out.println("la lista de integrantes tiene: "+listIntegrantes.size()+", "+listIntegrantes.get(0));
+    }
+
+    public void guardarPlan() throws Exception{
+        System.out.println("esto va: "+txtTema+" "+txtFecha.getTime()+" "+listIntegrantes.size());
+        //planDao.guardarPlan(txtTema,new java.sql.Date(txtFecha.getTime()),listIntegrantes);
+    }
+    
+    @PostConstruct
+    public void init(){
+        listIntegrantes = new ArrayList<>();
+    }
     
     public controladorPlan() {
+    }
+
+    
+    public Date getTxtFecha() {
+        return txtFecha;
+    }
+
+    public void setTxtFecha(Date txtFecha) {
+        this.txtFecha = txtFecha;
+    }
+
+    public String getTxtTema() {
+        return txtTema;
+    }
+
+    public void setTxtTema(String txtTema) {
+        this.txtTema = txtTema;
+    }
+
+    public String getTxtEstudiante() {
+        return txtEstudiante;
+    }
+
+    public void setTxtEstudiante(String txtEstudiante) {
+        this.txtEstudiante = txtEstudiante;
     }
     
     public Usuario getUsuario() {
@@ -67,11 +103,11 @@ public class controladorPlan implements Serializable {
         this.usuario = usuario;
     }
 
-    public List<Usuario> getListIntegrantes() {
+    public List<String> getListIntegrantes() {
         return listIntegrantes;
     }
 
-    public void setListIntegrantes(List<Usuario> listIntegrantes) {
+    public void setListIntegrantes(List<String> listIntegrantes) {
         this.listIntegrantes = listIntegrantes;
     }
 
@@ -98,7 +134,7 @@ public class controladorPlan implements Serializable {
     public void setListUsuario(List<Usuario> listUsuario) {
         this.listUsuario = listUsuario;
     }
-    
+
     public String getUsuariosPlan() {
         return usuariosPlan;
     }
@@ -114,5 +150,5 @@ public class controladorPlan implements Serializable {
     public void setListaPlan(List<Plan> listaPlan) {
         this.listaPlan = listaPlan;
     }
-    
+
 }
