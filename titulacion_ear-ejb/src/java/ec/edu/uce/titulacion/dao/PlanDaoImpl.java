@@ -86,14 +86,12 @@ public class PlanDaoImpl extends DAO implements PlanDao{
         try {
             this.Conectar();
             this.getCn().setAutoCommit(false);
-            System.out.println("aaaaaaaaaaa");
             PreparedStatement st = this.getCn().prepareStatement("INSERT INTO plan (tema,fecha) VALUES(?,?)");
             st.setString(1, tema);
             st.setDate(2, (Date) fecha);
             st.executeUpdate();
             st.close();
             
-            System.out.println("bbbbbbbbbbbbbbbbbbb");
             PreparedStatement st2 = this.getCn().prepareStatement("SELECT MAX(id_plan) AS id_plan FROM plan");
             ResultSet rs;
             int idPlan =0;
@@ -103,43 +101,36 @@ public class PlanDaoImpl extends DAO implements PlanDao{
             }
             rs.close();
             st2.close();
-            System.out.println("ccccccccccccccc  id plan"+idPlan);
-            System.out.println(listIntegrantes.size());
+            
             List<Usuario> listUsuario = new ArrayList();
             for(int i=0;i<listIntegrantes.size();i++){
-                System.out.println("ccccccccccbbbbb");
                 PreparedStatement st3 = this.getCn().prepareStatement("SELECT id_usuario FROM usuario WHERE nombre = ?");
                 ResultSet rs2;
                 st3.setString(1, listIntegrantes.get(i));
                 rs2 = st3.executeQuery();
                 while(rs2.next()){
                     Usuario usuario = new Usuario();
-                    usuario.setIdUsuario(rs.getInt("id_usuario"));
-                    System.out.println("ccccccccccccccaaaaaa id de usuario"+usuario.getIdUsuario());
+                    usuario.setIdUsuario(rs2.getInt("id_usuario"));
                     listUsuario.add(usuario);
                 }
-                //rs2.close();
+                rs2.close();
                 st3.close();
             }
-            System.out.println("dddddddddddddddddddddd");
+
+            
             for(int i=0;i<listUsuario.size();i++){
-                System.out.println("dddddddddddddbbbbbbbbbbbb");
                 PreparedStatement st4 = this.getCn().prepareStatement("INSERT INTO plan_usuario (id_plan,id_usuario) VALUES (?,?)");
                 st4.setInt(1, idPlan);
                 st4.setInt(2, listUsuario.get(i).getIdUsuario());
                 st4.executeUpdate();
-                System.out.println("dddddddddddddddddddaaaaaaa idPlan"+idPlan+" idUsuario"+listUsuario.get(i).getIdUsuario());
                 st4.close();
             }
-            System.out.println("eeeeeeeeeeeeeeeee");
-            this.getCn().commit();
             
+            this.getCn().commit();
         } catch (Exception e) {
             this.getCn().rollback();
-            System.out.println("fffffffffffffffffffffff");
             throw e;
         } finally {
-            System.out.println("gggggggggggggggggggg");
             this.Cerrar();
         }
     }

@@ -11,10 +11,10 @@ import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 
 @Named(value = "controladorPlan")
-@RequestScoped
+@SessionScoped
 
 public class controladorPlan implements Serializable {
 
@@ -48,23 +48,31 @@ public class controladorPlan implements Serializable {
     }
 
     public void anadirEstudiante() {
-        listIntegrantes.add(txtEstudiante);
-        System.out.println("la lista de integrantes tiene: "+listIntegrantes.size()+", "+listIntegrantes.get(0));
+        boolean flag = false;
+        for (int i = 0; i < listIntegrantes.size(); i++) {
+            if(txtEstudiante.equals(listIntegrantes.get(i))){
+                flag=true;
+                i=listIntegrantes.size();
+            }
+        }
+        if(!flag){
+            listIntegrantes.add(txtEstudiante);
+        }
+        
     }
 
     public void quitarEstudiante(String txt) {
         listIntegrantes.remove(txt);
-        System.out.println("la lista de integrantes tiene: "+listIntegrantes.size()+", "+listIntegrantes.get(0));
     }
 
     public void guardarPlan() throws Exception{
-        System.out.println("esto va: "+txtTema+" "+txtFecha.getTime()+" "+listIntegrantes.size());
-        //planDao.guardarPlan(txtTema,new java.sql.Date(txtFecha.getTime()),listIntegrantes);
+ 
+        planDao.guardarPlan(txtTema,new java.sql.Date(txtFecha.getTime()),listIntegrantes);
     }
     
     @PostConstruct
     public void init(){
-        listIntegrantes = new ArrayList<>();
+        listIntegrantes = new ArrayList<String>();
     }
     
     public controladorPlan() {
