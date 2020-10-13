@@ -1,17 +1,21 @@
+
 package ec.edu.uce.titulacion.servicio;
 
-import java.util.Date;
+import ec.edu.uce.titulacion.dao.PlanDaoImpl;
+import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
-import javax.ejb.LocalBean;
 
 @Singleton
-@LocalBean
-public class ServicioEmail {
+public class ServicioEmail implements ServicioEmailLocal {
+
+    //@EJB
+    private PlanDaoImpl plan= new PlanDaoImpl();
 
     //@Schedule(second = "0", minute = "0", hour = "8")
-    //@Schedule(second = "*", minute = "*/1", hour = "*")
-    public void BarrerPlan(){
-        System.out.println(new Date());
+    @Schedule(second = "*", minute = "*", hour = "*")
+    public void BarrerPlan() throws Exception{
+        System.out.println("empieza el servicio");
+        plan.BarrerPlan();
     }
 }
