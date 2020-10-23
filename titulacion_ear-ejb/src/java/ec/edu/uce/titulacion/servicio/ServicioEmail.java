@@ -13,7 +13,7 @@ public class ServicioEmail implements ServicioEmailLocal {
     private PlanDaoImpl plan= new PlanDaoImpl();
 
     //@Schedule(second = "0", minute = "0", hour = "8")
-    @Schedule(second = "*", minute = "*", hour = "*")
+    @Schedule(second = "0", minute = "*/5", hour = "*")
     public void BarrerPlan() throws Exception{
         System.out.println("empieza el servicio");
         plan.BarrerPlan();

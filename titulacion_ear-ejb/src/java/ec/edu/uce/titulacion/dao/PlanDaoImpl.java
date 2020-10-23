@@ -52,8 +52,8 @@ public class PlanDaoImpl extends DAO implements PlanDao {
         }
         return lista;
     }
-    
-    public Plan findPlanById(Integer idPlan)throws Exception{
+
+    public Plan findPlanById(Integer idPlan) throws Exception {
         Plan plan = new Plan();
         ResultSet rs;
         try {
@@ -61,14 +61,14 @@ public class PlanDaoImpl extends DAO implements PlanDao {
             PreparedStatement st = this.getCn().prepareCall("SELECT id_plan, tema, fecha FROM plan WHERE id_plan = ? ");
             st.setInt(1, idPlan);
             rs = st.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 plan.setIdPlan(rs.getInt("id_plan"));
                 plan.setTema(rs.getString("tema"));
                 plan.setFecha(rs.getDate("fecha"));
             }
         } catch (Exception e) {
             throw e;
-        }finally{
+        } finally {
             this.Cerrar();
         }
         return plan;
@@ -160,22 +160,32 @@ public class PlanDaoImpl extends DAO implements PlanDao {
     }
 
     public void BarrerPlan() throws Exception {
-        List<Plan> lista;
+        List<Plan> lista, lista2;
         int caso;
         try {
             lista = this.listarPlan();
+            lista2 = lista;
             SendMailGmail servicio = new SendMailGmail();
+            System.out.println("qqqqqqqqqqqqqqqqqqqqqq: " + lista.size());
+            String fechaPlan="";
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             for (int i = 0; i < lista.size(); i++) {
-                caso = tipoEmail(lista.get(i).getFecha());
+                System.out.println("qqqqqqqqqqqqqqqqqqqqqqqq: " + lista.get(i).getFecha());
+                fechaPlan=sdf.format(lista.get(i).getFecha());
+                caso = tipoEmail(lista2.get(i).getFecha());
+                lista.get(i).setFecha(sdf.parse(fechaPlan));
+                System.out.println("qqqqqqqqqqqqqqqqqqqqqqqq2222222: " + lista.get(i).getFecha());
                 switch (caso) {
                     case 1:
+                        System.out.println("paso x aqui!!!");
                         servicio.enviarSegundoMail(lista.get(i));
                         break;
                     case 2:
+                        System.out.println("paso x aqui222!!!");
                         servicio.enviarTercerMail(lista.get(i));
                         break;
                     default:
-
+                        System.out.println("paso x aqui default!!!");
                 }
             }
         } catch (Exception e) {
@@ -185,20 +195,36 @@ public class PlanDaoImpl extends DAO implements PlanDao {
 
     private int tipoEmail(java.util.Date fecha) {
         int caso = 0;
+        SimpleDateFormat DateFor = new SimpleDateFormat("yyyy-MM-dd");
+        String stringDate = DateFor.format(fecha);
         java.util.Date fechaAux = fecha;
         try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             java.util.Date fechaActual = new java.util.Date();
-            fechaAux.setDate(fechaAux.getDay() + 15);
+            fechaActual = sdf.parse(sdf.format(fechaActual));
+            //fechaActual = sdf.parse(fechaActual.getYear()+"-"+fechaActual.getMonth()+"-"+fechaActual.getDate());
+            System.out.println("Fecha auxiliar" + fechaAux);
+            fechaAux.setDate(fechaAux.getDate() + 15);
+            System.out.println("Fecha auxiliar +15 dias: " + fechaAux);
+            System.out.println("Fecha Actual: " + fechaActual);
             if (fechaAux.compareTo(fechaActual) == 0) {
+                fechaAux.setDate(fechaAux.getDate() - 15);
+                System.out.println(fechaAux.compareTo(fechaActual));
                 caso = 1;
             } else {
-                fechaAux = fecha;
+                fechaAux.setDate(fechaAux.getDate() - 15);
                 fechaAux.setMonth(fechaAux.getMonth() + 5);
+                System.out.println("Fecha auxiliar +5 meses: " + fechaAux);
                 if (fechaAux.compareTo(fechaActual) == 0) {
+                    System.out.println(fechaAux.compareTo(fechaActual));
                     caso = 2;
                 }
+                //fechaAux.setMonth(fechaAux.getMonth() - 5);
+                fecha = DateFor.parse(stringDate);
+                fechaAux=DateFor.parse(stringDate);
             }
-
+//            fecha = DateFor.parse(stringDate);
+//            fechaAux=fecha;
         } catch (Exception e) {
 
         }

@@ -3,6 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/D:/Eilfil/Documentos/NetBeansProjects/titulacion_ear/titulacion_ear-ejb/src/java/ec/edu/uce/titulacion/servicio/ServicioEmail.java</file>
             <file>file:/D:/Eilfil/Documentos/NetBeansProjects/titulacion_ear/titulacion_ear-ejb/src/java/ec/edu/uce/titulacion/dao/PlanDaoImpl.java</file>
             <file>file:/D:/Eilfil/Documentos/NetBeansProjects/titulacion_ear/titulacion_ear-ejb/src/java/ec/edu/uce/titulacion/utilities/SendMailGmail.java</file>
         </group>

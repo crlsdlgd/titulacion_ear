@@ -26,7 +26,7 @@ import javax.mail.internet.MimeMultipart;
 
 public class SendMailGmail {
 
-    private String correoEnvia = "gestiontitulacionuce@gmail.com"; //correo emisor
+    private String correoEnvia = "gestiontitulacionuce@gmail.comm"; //correo emisor
     private String claveCorreo = "Pass_1992";//contraseña de correo emisor
     private Properties properties = new Properties();
 
@@ -152,8 +152,7 @@ public class SendMailGmail {
     }
 
     public void enviarSegundoMail(Plan plan) throws Exception {
-
-        //UsuarioDaoImpl dao = new UsuarioDaoImpl();
+        UsuarioDaoImpl dao = new UsuarioDaoImpl();
         try {
             List<Usuario> lista = dao.listarUserByPlan(plan);
             for (int i = 0; i < lista.size(); i++) {
@@ -218,11 +217,12 @@ public class SendMailGmail {
 
     public void enviarSegundoMailUsuario(Usuario user, Plan plan) {
         // SMTP info
+        
+        System.out.println("bbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
         String host = properties.getProperty("mail.smtp.host");
         String port = properties.getProperty("mail.smtp.port");
 
         // message info
-        //String mailTo = user.getEmail();
         String mailTo = user.getEmail();
         String subject = "RECORDATORIO DE TEMA DE TESIS";
         StringBuffer body = new StringBuffer("<html><br>");
