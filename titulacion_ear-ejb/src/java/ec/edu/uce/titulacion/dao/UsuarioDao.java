@@ -14,5 +14,7 @@ public interface UsuarioDao {
     Usuario buscarUsuarioLogin(String nick, String pass)throws Exception;
 
     public List<String> autoCompletarEstudiante(String query) throws Exception;
+
+    public boolean existeEstudiante(String txtEstudiante) throws Exception;
     
 }

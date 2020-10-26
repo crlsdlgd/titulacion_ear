@@ -19,6 +19,7 @@
             <ui:decorate template="template.xhtml"></ui:decorate>
             
             <h:form>
+                <p:outputLabel value="#{controladorUsuario.user.nick}" />
                 <p:panelGrid columns="2" styleClass="showcase-text-align-center" style="width: 50%;" >
                     <h:outputText value="Tema" /> 
                     <p:inputText placeholder="Ingrese tema" value="#{controladorPlan.txtTema}" />

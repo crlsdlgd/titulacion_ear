@@ -31,8 +31,8 @@ public class controladorPlan implements Serializable {
     private Usuario usuario;
     private Plan plan;
     private String usuariosPlan;
-    private String txtEstudiante,txtTema;
-    private Date txtFecha; 
+    private String txtEstudiante, txtTema;
+    private Date txtFecha;
 
     public void cargarPlan() throws Exception {
         listaPlan = planDao.listarPlan();
@@ -47,38 +47,41 @@ public class controladorPlan implements Serializable {
         return lista;
     }
 
-    public void anadirEstudiante() {
+    public void anadirEstudiante() throws Exception{
         boolean flag = false;
-        for (int i = 0; i < listIntegrantes.size(); i++) {
-            if(txtEstudiante.equals(listIntegrantes.get(i))){
-                flag=true;
-                i=listIntegrantes.size();
+        if (usuarioDao.existeEstudiante(txtEstudiante)) {
+            for (int i = 0; i < listIntegrantes.size(); i++) {
+                if (txtEstudiante.equals(listIntegrantes.get(i))) {
+                    flag = true;
+                    i = listIntegrantes.size();
+                }
             }
+        }else{
+            flag=true;
         }
-        if(!flag){
+        if (!flag) {
             listIntegrantes.add(txtEstudiante);
         }
-        
+
     }
 
     public void quitarEstudiante(String txt) {
         listIntegrantes.remove(txt);
     }
 
-    public void guardarPlan() throws Exception{
- 
-        planDao.guardarPlan(txtTema,new java.sql.Date(txtFecha.getTime()),listIntegrantes);
+    public void guardarPlan() throws Exception {
+
+        planDao.guardarPlan(txtTema, new java.sql.Date(txtFecha.getTime()), listIntegrantes, controladorUsuario.user);
     }
-    
+
     @PostConstruct
-    public void init(){
+    public void init() {
         listIntegrantes = new ArrayList<String>();
     }
-    
+
     public controladorPlan() {
     }
 
-    
     public Date getTxtFecha() {
         return txtFecha;
     }
@@ -102,7 +105,7 @@ public class controladorPlan implements Serializable {
     public void setTxtEstudiante(String txtEstudiante) {
         this.txtEstudiante = txtEstudiante;
     }
-    
+
     public Usuario getUsuario() {
         return usuario;
     }

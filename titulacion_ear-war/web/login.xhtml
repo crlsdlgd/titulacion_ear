@@ -24,10 +24,32 @@
                         <br/>
                         <p:password class="centrar" placeholder="Contraseña" value="#{controladorUsuario.password}"/>
                         <br/>
-                        <p:commandButton value="Ingresar" action="#{controladorUsuario.login()}" update="mensajes"/>                        
+                        <p:commandButton value="Ingresar" action="#{controladorUsuario.login()}" update="mensajes :dlgRol" oncomplete="PF('wlgRol').show();"/>                        
                     </div>
+
                 </h:form>
             </div>
+
+            <!--<p:dialog widgetVar="wlgRol" header="Acceder como..." modal="true" >
+                <h:form>
+                    <h:selectOneMenu value="{controladorUsuario.rolSelect}" class="form-control">
+                        <f:selectItems value="{controladorUsuario.listaRolUser}"/>
+                    </h:selectOneMenu>
+                    <br/>
+                    <p:commandButton value="Ingresar" actionListener="{controladorUsuario.redireccionRol()}" />
+                </h:form>                
+            </p:dialog>-->
+
+            <p:dialog id="dlgRol" widgetVar="wlgRol" header="Acceder como..." modal="true" >
+                <h:form>
+                    <h:selectOneMenu value="#{controladorUsuario.rolSelect}" class="form-control" >
+                        <f:selectItem itemLabel="Selecione un rol" itemValue=""/>
+                        <f:selectItems value="#{controladorUsuario.listaRolUser}"  var="rol" itemLabel="#{rol}" itemValue="#{rol}"/>
+                    </h:selectOneMenu>
+                    <br/>
+                    <p:commandButton value="Ingresar" actionListener="#{controladorUsuario.redireccionRol()}" />
+                </h:form>
+            </p:dialog>
 
         </h:body>
 

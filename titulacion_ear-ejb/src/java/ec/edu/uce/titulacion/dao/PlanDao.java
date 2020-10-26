@@ -12,6 +12,6 @@ public interface PlanDao {
     public List<Plan> listarPlan() throws Exception;
     public List<Plan> listarPlanByUser(Usuario usuario) throws Exception;
 
-    public void guardarPlan(String tema, Date fecha, List<String> listIntegrantes) throws Exception;
+    public void guardarPlan(String tema, Date fecha, List<String> listIntegrantes, Usuario user) throws Exception;
     
 }

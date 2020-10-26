@@ -104,7 +104,7 @@ public class PlanDaoImpl extends DAO implements PlanDao {
     }
 
     @Override
-    public void guardarPlan(String tema, Date fecha, List<String> listIntegrantes) throws Exception {
+    public void guardarPlan(String tema, Date fecha, List<String> listIntegrantes, Usuario user) throws Exception {
 
         try {
             this.Conectar();
@@ -124,6 +124,12 @@ public class PlanDaoImpl extends DAO implements PlanDao {
             }
             rs.close();
             st2.close();
+            
+            PreparedStatement st5 = this.getCn().prepareStatement("INSERT INTO plan_usuario (id_plan, id_usuario) VALUES(?,?)");
+            st5.setInt(1,idPlan);
+            st5.setInt(2,user.getIdUsuario());
+            st5.executeUpdate();
+            st5.close();
 
             List<Usuario> listUsuario = new ArrayList();
             for (int i = 0; i < listIntegrantes.size(); i++) {

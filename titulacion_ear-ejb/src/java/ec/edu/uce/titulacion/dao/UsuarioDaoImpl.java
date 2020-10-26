@@ -101,7 +101,7 @@ public class UsuarioDaoImpl extends DAO implements UsuarioDao {
                 usuario.setEmail(rs.getString("email"));
                 usuario.setNick(rs.getString("nick"));
             }
-            
+
             if (usuario.getIdUsuario() == null) {
                 return null;
             }
@@ -112,14 +112,14 @@ public class UsuarioDaoImpl extends DAO implements UsuarioDao {
             this.Cerrar();
         }
         return usuario;
-   
+
     }
 
     @Override
     public List<String> autoCompletarEstudiante(String query) throws Exception {
         List<String> lista;
         ResultSet rs;
-        query = "%"+query+"%";
+        query = "%" + query + "%";
         try {
             this.Conectar();
             PreparedStatement st = this.getCn().prepareCall("SELECT u.nombre\n"
@@ -142,6 +142,38 @@ public class UsuarioDaoImpl extends DAO implements UsuarioDao {
         }
         return lista;
 
+    }
+
+    @Override
+    public boolean existeEstudiante(String txtEstudiante) throws Exception {
+        ResultSet rs;
+        List<Usuario> lista;
+        boolean flag = true;
+        try {
+            this.Conectar();
+            PreparedStatement st = this.getCn().prepareCall("SELECT u.id_usuario FROM usuario u, rol_usuario ru, rol r\n"
+                    + "WHERE ru.id_usuario=u.id_usuario AND\n"
+                    + "ru.id_rol = r.id_rol AND\n"
+                    + "r.rol = 'Estudiante' AND\n"
+                    + "u.nombre= ? ");
+            st.setString(1, txtEstudiante);
+            rs = st.executeQuery();
+            lista = new ArrayList();
+            while (rs.next()) {
+                Usuario u = new Usuario();
+                u.setIdUsuario(rs.getInt("id_usuario"));
+                lista.add(u);
+            }
+            if (lista.isEmpty()) {
+                flag = false;
+            }
+        } catch (Exception e) {
+            return false;
+
+        } finally {
+            this.Cerrar();
+        }
+        return flag;
     }
 
 }
