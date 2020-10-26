@@ -122,7 +122,7 @@ public class SendMailGmail {
         body.append("Con el tema de: " + factorAutenticacion + " <br><br><br>");
         body.append("Gracias por utilizar nuestros servicios.<br><br><br>");
         body.append("Atentamente,<br>");
-        body.append("Dirección de Tecnologías de la Información y Comunicación UCE (c).</form>");
+        body.append("Facultad de Ingeniería Ciencias Físicas y Matemática, Dirección de Carrera de Ingeniería Informática.</form>");
         body.append("<img src=\"cid:image2\" style=\"width:100%;height:130px\" /><br>");
         body.append("</html>");
 
@@ -197,7 +197,7 @@ public class SendMailGmail {
         body.append("Recuerde que tiene seis meses para culminar este proyecto<br>");
         body.append("Gracias por utilizar nuestros servicios.<br><br><br>");
         body.append("Atentamente,<br>");
-        body.append("Dirección de Tecnologías de la Información y Comunicación UCE (c).</form>");
+        body.append("Facultad de Ingeniería Ciencias Físicas y Matemática, Dirección de Carrera de Ingeniería Informática.</form>");
         body.append("<img src=\"cid:image2\" style=\"width:100%;height:130px\" /><br>");
         body.append("</html>");
 
@@ -235,7 +235,7 @@ public class SendMailGmail {
         body.append("Con el tema de: " + plan.getTema() + " <br><br><br>");
         body.append("Gracias por utilizar nuestros servicios.<br><br><br>");
         body.append("Atentamente,<br>");
-        body.append("Dirección de Tecnologías de la Información y Comunicación UCE (c).</form>");
+        body.append("Facultad de Ingeniería Ciencias Físicas y Matemática, Dirección de Carrera de Ingeniería Informática.</form>");
         body.append("<img src=\"cid:image2\" style=\"width:100%;height:130px\" /><br>");
         body.append("</html>");
 
@@ -273,7 +273,7 @@ public class SendMailGmail {
         body.append("Recuerde ya han culminado cinco meses desde el registro de su tema, le queda un mes para el control antiplagio. <br>");
         body.append("Gracias por utilizar nuestros servicios.<br><br><br>");
         body.append("Atentamente,<br>");
-        body.append("Dirección de Tecnologías de la Información y Comunicación UCE (c).</form>");
+        body.append("Facultad de Ingeniería Ciencias Físicas y Matemática, Dirección de Carrera de Ingeniería Informática.</form>");
         body.append("<img src=\"cid:image2\" style=\"width:100%;height:130px\" /><br>");
         body.append("</html>");
 
