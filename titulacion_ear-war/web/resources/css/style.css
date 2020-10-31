@@ -26,7 +26,7 @@
     font-family: 'Open Sans',sans-serif;
     font-size: 28px;
     color: white;
-    left: 75%; /* X */
+    left: 56%; /* X */
     top: 30%; /* Y */
 }
 .textoSubTitle{
@@ -34,7 +34,7 @@
     font-family: 'Open Sans',sans-serif;
     font-size: 21px;
     color: white;
-    left: 65%; /* X */
+    left: 75%; /* X */
     top: 60%; /* Y */
 }
 .textoFooter{

@@ -15,7 +15,6 @@ import javax.enterprise.context.SessionScoped;
 
 @Named(value = "controladorPlan")
 @SessionScoped
-
 public class controladorPlan implements Serializable {
 
     private static final long serialversionuid = 1L;
@@ -28,14 +27,25 @@ public class controladorPlan implements Serializable {
     private List<Plan> listaPlan;
     private List<Usuario> listUsuario;
     private List<String> listIntegrantes;
-    private Usuario usuario;
     private Plan plan;
-    private String usuariosPlan;
-    private String txtEstudiante, txtTema;
+    private String txtEstudiante, txtTema,txtDetalle;
     private Date txtFecha;
+    
+    
+    public String getTxtDetalle() {
+        return txtDetalle;
+    }
 
-    public void cargarPlan() throws Exception {
-        listaPlan = planDao.listarPlan();
+    public void setTxtDetalle(String txtDetalle) {
+        this.txtDetalle = txtDetalle;
+    }
+    
+    public void cargarPlanesAprobados() throws Exception {
+        listaPlan = planDao.listarPlanesAprobados();
+    }
+    
+    public void cargarPlanesNoAprobados() throws Exception {
+        listaPlan = planDao.listarPlanesNoAprobados();
     }
 
     public void listarUsuarioByPlan(Plan plan) throws Exception {
@@ -65,6 +75,7 @@ public class controladorPlan implements Serializable {
 
     }
 
+    
     public void quitarEstudiante(String txt) {
         listIntegrantes.remove(txt);
     }
@@ -74,6 +85,10 @@ public class controladorPlan implements Serializable {
         planDao.guardarPlan(txtTema, new java.sql.Date(txtFecha.getTime()), listIntegrantes, controladorUsuario.user);
     }
 
+    public void guardarPropuestaPlan() throws Exception{
+        planDao.guardarPropuestaPlan(txtTema, txtDetalle, controladorUsuario.user);
+    }
+    
     @PostConstruct
     public void init() {
         listIntegrantes = new ArrayList<String>();
@@ -106,13 +121,6 @@ public class controladorPlan implements Serializable {
         this.txtEstudiante = txtEstudiante;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
 
     public List<String> getListIntegrantes() {
         return listIntegrantes;
@@ -146,13 +154,6 @@ public class controladorPlan implements Serializable {
         this.listUsuario = listUsuario;
     }
 
-    public String getUsuariosPlan() {
-        return usuariosPlan;
-    }
-
-    public void setUsuariosPlan(String usuariosPlan) {
-        this.usuariosPlan = usuariosPlan;
-    }
 
     public List<Plan> getListaPlan() {
         return listaPlan;

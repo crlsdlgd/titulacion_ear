@@ -3,9 +3,34 @@ package ec.edu.uce.titulacion.entidades;
 import java.util.Date;
 
 public class Plan {
-    private Integer idPlan;
-    private String tema;
+    private Integer idPlan,propuestoPor;
+    private String tema,detalle;
     private Date fecha;
+    private boolean aprobado;
+
+    public Integer getPropuestoPor() {
+        return propuestoPor;
+    }
+
+    public void setPropuestoPor(Integer propuestoPor) {
+        this.propuestoPor = propuestoPor;
+    }
+
+    public String getDetalle() {
+        return detalle;
+    }
+
+    public void setDetalle(String detalle) {
+        this.detalle = detalle;
+    }
+
+    public boolean isAprobado() {
+        return aprobado;
+    }
+
+    public void setAprobado(boolean aprobado) {
+        this.aprobado = aprobado;
+    }
 
     public Integer getIdPlan() {
         return idPlan;

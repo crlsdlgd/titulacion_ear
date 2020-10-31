@@ -176,4 +176,26 @@ public class UsuarioDaoImpl extends DAO implements UsuarioDao {
         return flag;
     }
 
+    @Override
+    public Usuario buscarUsuarioPrecursor(Plan plan) throws Exception {
+        Usuario user = new Usuario();
+        ResultSet rs;
+        try {
+            this.Conectar();
+            PreparedStatement st = this.getCn().prepareCall("SELECT id_usuario, nombre FROM usuario WHERE id_usuario= ?");
+            st.setInt(1, plan.getPropuestoPor());
+            rs = st.executeQuery();
+            while (rs.next()) {
+                user.setIdUsuario(rs.getInt("id_usuario"));
+                user.setNombre(rs.getString("nombre"));
+            }
+        } catch (Exception e) {
+            throw e;
+        }finally{
+            this.Cerrar();
+        }
+        return user;
+        
+    }
+
 }

@@ -47,7 +47,7 @@
                     </p:column>
                 </p:dataTable>
                 <p:commandButton value="Guardar Cambios" actionListener="#{controladorPlan.guardarPlan()}" style="background-color: #5ce620"/>
-                <p:commandButton value="Cancelar" action="/faces/homeDocente.xhtml" />
+                <p:commandButton value="Cancelar" actionListener="#{controladorUsuario.redireccionRol()}" />
             </h:form>
         </h:body>
 

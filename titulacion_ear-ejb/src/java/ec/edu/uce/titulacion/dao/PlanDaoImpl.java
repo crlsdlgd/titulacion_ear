@@ -35,7 +35,7 @@ public class PlanDaoImpl extends DAO implements PlanDao {
         ResultSet rs;
         try {
             this.Conectar();
-            PreparedStatement st = this.getCn().prepareCall("SELECT id_plan, tema, fecha FROM plan");
+            PreparedStatement st = this.getCn().prepareCall("SELECT id_plan, tema, fecha FROM plan ");
             rs = st.executeQuery();
             lista = new ArrayList();
             while (rs.next()) {
@@ -43,6 +43,55 @@ public class PlanDaoImpl extends DAO implements PlanDao {
                 plan.setIdPlan(rs.getInt("id_plan"));
                 plan.setTema(rs.getString("tema"));
                 plan.setFecha(rs.getDate("fecha"));
+                lista.add(plan);
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            this.Cerrar();
+        }
+        return lista;
+    }
+    
+    @Override
+    public List<Plan> listarPlanesAprobados() throws Exception {
+        List<Plan> lista;
+        ResultSet rs;
+        try {
+            this.Conectar();
+            PreparedStatement st = this.getCn().prepareCall("SELECT id_plan, tema, fecha FROM plan WHERE aprobado = 'TRUE' ");
+            rs = st.executeQuery();
+            lista = new ArrayList();
+            while (rs.next()) {
+                Plan plan = new Plan();
+                plan.setIdPlan(rs.getInt("id_plan"));
+                plan.setTema(rs.getString("tema"));
+                plan.setFecha(rs.getDate("fecha"));
+                lista.add(plan);
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            this.Cerrar();
+        }
+        return lista;
+    }
+    
+    @Override
+    public List<Plan> listarPlanesNoAprobados() throws Exception {
+        List<Plan> lista;
+        ResultSet rs;
+        try {
+            this.Conectar();
+            PreparedStatement st = this.getCn().prepareCall("SELECT id_plan, tema, detalle, propuesto_por FROM plan WHERE aprobado = 'FALSE' ");
+            rs = st.executeQuery();
+            lista = new ArrayList();
+            while (rs.next()) {
+                Plan plan = new Plan();
+                plan.setIdPlan(rs.getInt("id_plan"));
+                plan.setTema(rs.getString("tema"));
+                plan.setDetalle(rs.getString("detalle"));
+                plan.setPropuestoPor(rs.getInt("propuesto_por"));
                 lista.add(plan);
             }
         } catch (Exception e) {
@@ -236,5 +285,27 @@ public class PlanDaoImpl extends DAO implements PlanDao {
         }
         return caso;
     }
+
+    @Override
+    public void guardarPropuestaPlan(String txtTema, String txtDetalle, Usuario user) throws Exception{
+        try {
+            this.Conectar();
+            this.getCn().setAutoCommit(false);
+            PreparedStatement st = this.getCn().prepareStatement("INSERT INTO plan (tema,detalle,propuesto_por, aprobado) VALUES(?,?,?,FALSE)");
+            st.setString(1, txtTema);
+            st.setString(2, txtDetalle);
+            st.setInt(3, user.getIdUsuario());
+            st.executeUpdate();
+            st.close();
+            this.getCn().commit();
+        } catch (Exception e) {
+            throw e;
+        }
+        finally{
+            this.Cerrar();
+        }
+    
+    }
+
 
 }

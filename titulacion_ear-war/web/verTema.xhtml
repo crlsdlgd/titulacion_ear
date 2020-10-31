@@ -17,7 +17,7 @@
 
         <h:body>
             <ui:decorate template="template.xhtml"></ui:decorate>
-            <f:event type="preRenderView" listener="#{controladorPlan.cargarPlan()}"/>
+            <f:event type="preRenderView" listener="#{controladorPlan.cargarPlanesAprobados()}"/>
             <h:form>
                 <p:dataTable id="data" var="plan" value="#{controladorPlan.listaPlan}" >
                     <p:column headerText="Tema">
@@ -31,7 +31,7 @@
                     </p:column>        
                 </p:dataTable>
             </h:form>
-            <p:commandButton value="Cancelar" action="/faces/homeDocente.xhtml" />
+            <p:commandButton value="Cancelar" actionListener="#{controladorUsuario.redireccionRol()}" />
             <p:dialog header="Integrantes" widgetVar="wdlWare" id="dlgWare">
                 <h:form>
                     <p:dataTable value="#{controladorPlan.listUsuario}" var="usuario">

@@ -3,6 +3,7 @@ package ec.edu.uce.titulacion.controladores;
 import ec.edu.uce.titulacion.dao.RolDao;
 import ec.edu.uce.titulacion.entidades.Usuario;
 import ec.edu.uce.titulacion.dao.UsuarioDao;
+import ec.edu.uce.titulacion.entidades.Plan;
 import ec.edu.uce.titulacion.entidades.Rol;
 import java.io.IOException;
 import javax.inject.Named;
@@ -13,7 +14,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-
+import org.primefaces.context.RequestContext;
 
 @Named(value = "controladorUsuario")
 @SessionScoped
@@ -26,10 +27,28 @@ public class controladorUsuario implements Serializable {
     private UsuarioDao usuarioDao;
 
     public static Usuario user;
+
+    public Usuario getUsuarioPrecursor() {
+        return usuarioPrecursor;
+    }
+
+    public void setUsuarioPrecursor(Usuario usuarioPrecursor) {
+        this.usuarioPrecursor = usuarioPrecursor;
+    }
+
+    public Rol getUsuarioPrecursorRol() {
+        return usuarioPrecursorRol;
+    }
+
+    public void setUsuarioPrecursorRol(Rol usuarioPrecursorRol) {
+        this.usuarioPrecursorRol = usuarioPrecursorRol;
+    }
+    private Usuario usuarioPrecursor;
     private List<String> listaRolUser;
     private String nick, password;
     private String rolSelect;
-    
+    private Rol usuarioPrecursorRol;
+
     public controladorUsuario() {
     }
 
@@ -56,7 +75,6 @@ public class controladorUsuario implements Serializable {
         }
     }
 
-
     public void redireccionRol() {
 
         try {
@@ -68,14 +86,20 @@ public class controladorUsuario implements Serializable {
                 case "Docente":
                     contex.getExternalContext().redirect("homeDocente.xhtml");
                     break;
-                    default:
-                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "No se encuentra implementado tal rol", null));
+                default:
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "No se encuentra implementado tal rol", null));
             }
         } catch (Exception e) {
         }
 
     }
-    
+
+    public void verUsuarioPrecursor(Plan plan) throws Exception {
+        setUsuarioPrecursor(usuarioDao.buscarUsuarioPrecursor(plan));
+        setUsuarioPrecursorRol(rolDao.buscarRolByUser(getUsuarioPrecursor()).get(0));
+        RequestContext.getCurrentInstance().execute("PF('wdlWare2').show();");
+    }
+
     public void setListaRolUser(List<String> listaRolUser) {
         this.listaRolUser = listaRolUser;
     }

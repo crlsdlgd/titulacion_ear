@@ -10,8 +10,13 @@ import javax.ejb.Local;
 public interface PlanDao {
     public void registrar(Plan plan) throws Exception;
     public List<Plan> listarPlan() throws Exception;
+    public List<Plan> listarPlanesAprobados() throws Exception;
     public List<Plan> listarPlanByUser(Usuario usuario) throws Exception;
 
     public void guardarPlan(String tema, Date fecha, List<String> listIntegrantes, Usuario user) throws Exception;
+
+    public void guardarPropuestaPlan(String txtTema, String txtDetalle, Usuario user) throws Exception;
+
+    public List<Plan> listarPlanesNoAprobados() throws Exception;
     
 }
