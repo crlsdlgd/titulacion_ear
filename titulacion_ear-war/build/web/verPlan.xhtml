@@ -17,8 +17,9 @@
 
         <h:body>
             <ui:decorate template="template.xhtml"></ui:decorate>
-            <f:event type="preRenderView" listener="#{controladorPlan.cargarPlanesNoAprobados()}"/>
-            <h:form>
+            <f:event type="preRenderView" listener="#{controladorPlan.cargarPlanesNoAprobadosNiPostulados()}"/>
+            <h:form id="form1">
+                <p:growl id="growl2" life="3000" />
                 <p:dataTable id="data" var="plan" value="#{controladorPlan.listaPlan}" >
                     <p:column headerText="Tema">
                         <h:outputText value="#{plan.tema}"/>
@@ -28,15 +29,28 @@
                     </p:column>
                     <p:column headerText="Propuesto por">
                         <p:commandLink value="Ver Precursor" actionListener="#{controladorUsuario.verUsuarioPrecursor(plan)}" update=":dlgWare2"/>
-                    </p:column>        
+                    </p:column>  
+                    <p:column headerText="Acciones">
+                        <p:commandLink value="Postularme a este tema" actionListener="#{controladorPlan.postularTema(plan)}" update=":dlgPostulacion"/>
+                    </p:column>
                 </p:dataTable>
+
             </h:form>
             <p:commandButton value="Cancelar" actionListener="#{controladorUsuario.redireccionRol()}" />
+
             <p:dialog header="Precursor" widgetVar="wdlWare2" id="dlgWare2">
                 <h:form>
-                    <p:outputLabel value="Nombre #{controladorUsuario.usuarioPrecursor.nombre}" />
+                    <p:outputLabel value="Nombre: #{controladorUsuario.usuarioPrecursor.nombre}" />
                     <br/>
-                    <p:outputLabel value="Funcion #{controladorUsuario.usuarioPrecursorRol.rol}" />
+                    <p:outputLabel value="Función: #{controladorUsuario.usuarioPrecursorRol.rol}" />
+                </h:form>
+            </p:dialog>
+
+            <p:dialog header="Postulación" widgetVar="wdlPostulacion" id="dlgPostulacion">
+                <h:form>
+                    <p:outputLabel value="¿Está seguro que desea postularse al tema #{controladorPlan.plan.tema}?" />
+                <br/>
+                <p:commandButton value="Si, Estoy de acuerdo" actionListener="#{controladorPlan.postular()}" ajax="false" update="growl2"/>
                 </h:form>
             </p:dialog>
 

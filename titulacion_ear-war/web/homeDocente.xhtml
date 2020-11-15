@@ -19,15 +19,20 @@
             <h:form>
                 <div class="container">
                     <p:menubar>
-                        <p:menuitem value="Registrar nuevo Tema" action="registrarTema"/>
-                        <p:menuitem value="Ver Temas" action="verTema"/>
-                        
-                        
+                        <p:submenu label="Propuestas" >
+                            <p:menuitem value="Proponer un nuevo Tema" action="proponerPlan"/>
+                            <p:menuitem value="Ver Propuestas" action="verPlan"/>
+                            <p:menuitem value="Mis Postulaciones" action="verPostulaciones"/>
+                            <p:menuitem value="Concretar Plan" action="concretarPlan"/>
+                        </p:submenu>
+                        <p:menuitem value="Mis Proyectos" action="verProyectos"/>
+
                         <f:facet name="options">
                             <img src="resources/images/usuario_positivo.png" />
                             <p:outputLabel value="#{controladorUsuario.user.nick}" />
+                            <p:commandButton title="Cerrar Sessión" actionListener="#{controladorUsuario.cerrarSession()}" action="inicio.xhtml" icon="ui-icon-power"/>
                         </f:facet>
-                       
+
                     </p:menubar>
                 </div>
             </h:form>

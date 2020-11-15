@@ -19,6 +19,7 @@
             <ui:decorate template="template.xhtml"></ui:decorate>
             
             <h:form>
+                <p:growl id="growl" life="3000" />
                 <p:outputLabel value="#{controladorUsuario.user.nick}" />
                 <p:panelGrid columns="2" styleClass="showcase-text-align-center" style="width: 50%;" >
                     <h:outputText value="Tema Propuesto" /> 
@@ -29,7 +30,7 @@
 
                 </p:panelGrid >
                 
-                <p:commandButton value="Guardar Cambios" actionListener="#{controladorPlan.guardarPropuestaPlan()}" style="background-color: #5ce620"/>
+                <p:commandButton value="Guardar Cambios" actionListener="#{controladorPlan.guardarPropuestaPlan()}" style="background-color: #5ce620" update="growl" ajax="false"/>
                 <p:commandButton value="Cancelar" actionListener="#{controladorUsuario.redireccionRol()}" />
             </h:form>
         </h:body>

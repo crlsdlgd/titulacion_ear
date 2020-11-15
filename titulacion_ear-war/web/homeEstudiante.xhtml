@@ -21,12 +21,14 @@
                     <p:menubar>
                         <p:menuitem value="Proponer plan de Tesís" action="proponerPlan"/>
                         <p:menuitem value="Ver Planes de Tesís" action="verPlan"/>
-                        
+
                         <f:facet name="options">
                             <img src="resources/images/usuario_positivo.png" />
                             <p:outputLabel value="#{controladorUsuario.user.nick}" />
+                            <p:commandButton title="Cerrar Sessión" actionListener="#{controladorUsuario.cerrarSession()}" action="inicio.xhtml" icon="ui-icon-power"/>
+
                         </f:facet>
-                       
+
                     </p:menubar>
                 </div>
             </h:form>

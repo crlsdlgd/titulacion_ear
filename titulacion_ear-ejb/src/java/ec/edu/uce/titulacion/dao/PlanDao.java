@@ -17,6 +17,12 @@ public interface PlanDao {
 
     public void guardarPropuestaPlan(String txtTema, String txtDetalle, Usuario user) throws Exception;
 
-    public List<Plan> listarPlanesNoAprobados() throws Exception;
-    
+    public List<Plan> listarPlanesNoAprobadosNiPostulados(Usuario user) throws Exception;
+
+    public void postular(Plan plan, Usuario user)throws Exception;
+
+    public List<Plan> cargarMisPostulaciones(Usuario user)throws Exception;
+    public List<Plan> cargarMisProyectos(Usuario user)throws Exception;
+
+    public void listoRevision(Plan plan)throws Exception;
 }
