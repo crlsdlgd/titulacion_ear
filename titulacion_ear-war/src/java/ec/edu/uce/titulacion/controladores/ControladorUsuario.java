@@ -2,11 +2,13 @@ package ec.edu.uce.titulacion.controladores;
 
 import ec.edu.uce.titulacion.dao.PlanUsuarioDao;
 import ec.edu.uce.titulacion.dao.RolDao;
+import ec.edu.uce.titulacion.dao.RolUsuarioDao;
 import ec.edu.uce.titulacion.entidades.Usuario;
 import ec.edu.uce.titulacion.dao.UsuarioDao;
 import ec.edu.uce.titulacion.entidades.Plan;
 import ec.edu.uce.titulacion.entidades.PlanUsuario;
 import ec.edu.uce.titulacion.entidades.Rol;
+import ec.edu.uce.titulacion.entidades.RolUsuario;
 import java.io.IOException;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -24,12 +26,12 @@ public class ControladorUsuario implements Serializable {
 
     @EJB
     private RolDao rolDao;
-
     @EJB
     private UsuarioDao usuarioDao;
-    
     @EJB
     private PlanUsuarioDao planUsuarioDao;
+    @EJB
+    private RolUsuarioDao rolUsuarioDao;
 
     public static Usuario user;
     private Usuario usuarioPrecursor;
@@ -38,7 +40,7 @@ public class ControladorUsuario implements Serializable {
     private String nick, password;
     private String rolSelect;
     private Rol usuarioPrecursorRol;
-
+    private List<RolUsuario> listaIntegrantes;
 
     public void login() throws Exception {
         Usuario usr = usuarioDao.buscarUsuarioLogin(nick, password);
@@ -75,6 +77,9 @@ public class ControladorUsuario implements Serializable {
                 case "Docente":
                     contex.getExternalContext().redirect("homeDocente.xhtml");
                     break;
+                case "Consejo":
+                    contex.getExternalContext().redirect("homeConsejo.xhtml");
+                    break;
                 default:
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "No se encuentra implementado tal rol", null));
             }
@@ -89,22 +94,27 @@ public class ControladorUsuario implements Serializable {
         RequestContext.getCurrentInstance().execute("PF('wdlWare2').show();");
     }
 
-    public void cerrarSession(){
+    public void cerrarSession() {
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
     }
-    
-    public void verPostulantes(Plan plan) throws Exception{
+
+    public void verPostulantes(Plan plan) throws Exception {
         setListaPostulantes(planUsuarioDao.listarPostulantesByPlan(plan));
         RequestContext.getCurrentInstance().execute("PF('wdlWare3').show();");
     }
-    
-    public void guardarProyecto()throws Exception{
+
+    public void verIntegrantes(Plan plan) throws Exception {
+        setListaIntegrantes(rolUsuarioDao.listarIntegrantesByPlan(plan));
+        RequestContext.getCurrentInstance().execute("PF('wdlWare3').show();");
+    }
+
+    public void guardarProyecto() throws Exception {
         planUsuarioDao.guardarProyecto(getListaPostulantes());
     }
-    
+
     public ControladorUsuario() {
     }
-    
+
     public Usuario getUsuarioPrecursor() {
         return usuarioPrecursor;
     }
@@ -120,7 +130,7 @@ public class ControladorUsuario implements Serializable {
     public void setUsuarioPrecursorRol(Rol usuarioPrecursorRol) {
         this.usuarioPrecursorRol = usuarioPrecursorRol;
     }
-    
+
     public void setListaRolUser(List<String> listaRolUser) {
         this.listaRolUser = listaRolUser;
     }
@@ -170,5 +180,11 @@ public class ControladorUsuario implements Serializable {
         this.listaPostulantes = listaPostulantes;
     }
 
+    public List<RolUsuario> getListaIntegrantes() {
+        return listaIntegrantes;
+    }
 
+    public void setListaIntegrantes(List<RolUsuario> listaIntegrantes) {
+        this.listaIntegrantes = listaIntegrantes;
+    }
 }

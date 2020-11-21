@@ -119,11 +119,37 @@ public class ControladorPlan implements Serializable {
     public void listoRevision() throws Exception{
         planDao.listoRevision(plan);
         addMessage("El Plan se envió para revisión");
-        cargarMisPostulaciones();
+        //cargarMisPostulaciones();
     }
     
-    public void planListo(Plan plan){
+    public void noListoRevision() throws Exception{
+        planDao.noListoRevision(plan);
+        addMessage("El Plan se removió antes de ser revisado");
+        //cargarMisPostulaciones();
+    }
+    
+    public void aprobarTema() throws Exception{
+        planDao.aprobarTema(plan);
+        addMessage("El Plan se aprobó correctamente");
+        //cargarMisPostulaciones();
+    }
+    
+    public void noAprobarTema() throws Exception{
+        planDao.noAprobarTema(plan);
+        addMessage("El Plan se descarto correctamente");
+        //cargarMisPostulaciones();
+    }
+    
+    public void selecionarPlan(Plan plan){
         this.plan=plan;
+    }
+    
+    public void cargarPlanesPorAprobar() throws Exception{
+        listaPlan = planDao.cargarPlanesPorAprobar(ControladorUsuario.user);
+    }
+
+    public void cargarPlanesPorRevisar() throws Exception{
+        listaPlan = planDao.cargarPlanesPorRevisar();
     }
     
     @PostConstruct

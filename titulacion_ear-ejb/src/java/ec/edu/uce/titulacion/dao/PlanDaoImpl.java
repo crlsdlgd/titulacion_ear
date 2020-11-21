@@ -339,7 +339,7 @@ public class PlanDaoImpl extends DAO implements PlanDao {
     @Override
     public void postular(Plan plan, Usuario user) throws Exception {
         try {
-            System.out.println("aaaaaaaaaaapostular");
+
             this.Conectar();
             this.getCn().setAutoCommit(false);
             PreparedStatement st = this.getCn().prepareStatement("INSERT INTO plan_usuario (id_plan,id_usuario,postulado) VALUES(?,?,FALSE)");
@@ -366,6 +366,7 @@ public class PlanDaoImpl extends DAO implements PlanDao {
                     + " FROM plan p, plan_usuario pu\n"
                     + "WHERE p.id_plan=pu.id_plan AND\n"
                     + "p.aprobado='FALSE' AND\n"
+                    + "p.listo='FALSE' AND\n"
                     + "pu.id_usuario=?");
 
             st.setInt(1, usuario.getIdUsuario());
@@ -437,5 +438,117 @@ public class PlanDaoImpl extends DAO implements PlanDao {
         }
 
     }
+    
+    @Override
+    public void noListoRevision(Plan plan) throws Exception {
+        try {
+            this.Conectar();
+            PreparedStatement st = this.getCn().prepareStatement("UPDATE plan \n"
+                    + "SET listo = FALSE\n"
+                    + "WHERE id_plan= ? ");
+            st.setInt(1, plan.getIdPlan());
+            st.executeUpdate();
+            st.close();
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            this.Cerrar();
+        }
 
+    }
+
+    @Override
+    public List<Plan> cargarPlanesPorAprobar(Usuario user) throws Exception{
+        List<Plan> lista;
+        ResultSet rs;
+        try {
+            this.Conectar();
+            PreparedStatement st = this.getCn().prepareCall("SELECT p.id_plan, p.tema, p.detalle, p.propuesto_por \n"
+                    + "FROM plan p, plan_usuario pu\n"
+                    + "WHERE p.id_plan=pu.id_plan AND\n"
+                    + "p.aprobado='FALSE' AND\n"
+                    + "p.listo='TRUE' AND\n"
+                    + "pu.id_usuario=?");
+
+            st.setInt(1, user.getIdUsuario());
+            rs = st.executeQuery();
+            lista = new ArrayList();
+            while (rs.next()) {
+                Plan plan = new Plan();
+                plan.setIdPlan(rs.getInt("id_plan"));
+                plan.setTema(rs.getString("tema"));
+                plan.setDetalle(rs.getString("detalle"));
+                plan.setPropuestoPor(rs.getInt("propuesto_por"));
+                lista.add(plan);
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            this.Cerrar();
+        }
+        return lista;
+    }
+
+    @Override
+    public void aprobarTema(Plan plan) throws Exception {
+        try {
+            this.Conectar();
+            PreparedStatement st = this.getCn().prepareStatement("UPDATE plan \n"
+                    + "SET listo = FALSE, aprobado= TRUE, observaciones='N/A'\n"
+                    + "WHERE id_plan= ? ");
+            st.setInt(1, plan.getIdPlan());
+            st.executeUpdate();
+            st.close();
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            this.Cerrar();
+        }
+    }
+
+    @Override
+    public List<Plan> cargarPlanesPorRevisar() throws Exception {
+        List<Plan> lista;
+        ResultSet rs;
+        try {
+            this.Conectar();
+            PreparedStatement st = this.getCn().prepareCall("SELECT id_plan, tema, detalle, propuesto_por \n"
+                    + "FROM plan p\n"
+                    + "WHERE listo='TRUE'");
+            rs = st.executeQuery();
+            lista = new ArrayList();
+            while (rs.next()) {
+                Plan plan = new Plan();
+                plan.setIdPlan(rs.getInt("id_plan"));
+                plan.setTema(rs.getString("tema"));
+                plan.setDetalle(rs.getString("detalle"));
+                plan.setPropuestoPor(rs.getInt("propuesto_por"));
+                lista.add(plan);
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            this.Cerrar();
+        }
+        return lista;
+    }
+
+    @Override
+    public void noAprobarTema(Plan plan) throws Exception {
+        try {
+            this.Conectar();
+            PreparedStatement st = this.getCn().prepareStatement("UPDATE plan \n"
+                    + "SET listo = FALSE, observaciones= ?\n"
+                    + "WHERE id_plan= ? ");
+            st.setString(1, plan.getObservaciones());
+            st.setInt(2, plan.getIdPlan());
+            st.executeUpdate();
+            st.close();
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            this.Cerrar();
+        }
+    }
+    
 }

@@ -48,6 +48,42 @@ public class PlanUsuarioDaoImpl extends DAO implements PlanUsuarioDao {
     }
 
     @Override
+    public List<PlanUsuario> listarIntegrantesByPlan(Plan plan) throws Exception {
+        List<PlanUsuario> lista;
+        ResultSet rs;
+        try {
+            this.Conectar();
+            PreparedStatement st = this.getCn().prepareCall("SELECT u.id_usuario, u.nombre, u.email, pu.postulado \n"
+                    + "FROM usuario u, plan_usuario pu, plan p\n"
+                    + "WHERE pu.id_usuario=u.id_usuario  AND\n"
+                    + "pu.id_plan=p.id_plan AND\n"
+                    + "p.aprobado='TRUE' AND\n"
+                    + "pu.postulado='TRUE' AND\n"
+                    + "p.id_plan= ?");
+            st.setInt(1, plan.getIdPlan());
+            rs = st.executeQuery();
+            lista = new ArrayList();
+            while (rs.next()) {
+                Usuario user = new Usuario();
+                PlanUsuario planUser = new PlanUsuario();
+                user.setIdUsuario(rs.getInt("id_usuario"));
+                user.setNombre(rs.getString("nombre"));
+                user.setEmail(rs.getString("email"));
+                planUser.setPlan(plan);
+                planUser.setUsuario(user);
+                planUser.setPostulado(rs.getBoolean("postulado"));
+                lista.add(planUser);
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            this.Cerrar();
+        }
+        return lista;
+
+    }
+
+    @Override
     public void guardarProyecto(List<PlanUsuario> listaPostulantes) throws Exception {
 
         try {

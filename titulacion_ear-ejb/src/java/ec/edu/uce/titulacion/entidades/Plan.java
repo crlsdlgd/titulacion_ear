@@ -4,9 +4,18 @@ import java.util.Date;
 
 public class Plan {
     private Integer idPlan,propuestoPor;
-    private String tema,detalle;
+    private String tema,detalle,observaciones;
     private Date fecha;
     private boolean aprobado;
+    
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
+    }
+    
 
     public Integer getPropuestoPor() {
         return propuestoPor;

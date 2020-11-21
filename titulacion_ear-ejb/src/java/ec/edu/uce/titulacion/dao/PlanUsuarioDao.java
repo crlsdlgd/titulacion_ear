@@ -12,5 +12,7 @@ public interface PlanUsuarioDao {
     public List<PlanUsuario> listarPostulantesByPlan(Plan plan)throws Exception;
 
     public void guardarProyecto(List<PlanUsuario> listaPostulantes)throws Exception;
+
+    public List<PlanUsuario> listarIntegrantesByPlan(Plan plan)throws Exception;
     
 }

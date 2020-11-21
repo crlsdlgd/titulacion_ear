@@ -25,4 +25,15 @@ public interface PlanDao {
     public List<Plan> cargarMisProyectos(Usuario user)throws Exception;
 
     public void listoRevision(Plan plan)throws Exception;
+
+    public List<Plan> cargarPlanesPorAprobar(Usuario user)throws Exception;
+
+    public void noListoRevision(Plan plan)throws Exception;
+
+    public void aprobarTema(Plan plan)throws Exception;
+
+    public List<Plan> cargarPlanesPorRevisar()throws Exception;
+
+    public void noAprobarTema(Plan plan)throws Exception;
+
 }
